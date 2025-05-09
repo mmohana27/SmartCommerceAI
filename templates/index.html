@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartCommerceAI Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
+        }
+
+        .card {
+            background: #1e1e2f;
+            border: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #00ffd0;
+        }
+
+        .card-title {
+            color: #00ffd0;
+        }
+
+        .btn-glow {
+            background: linear-gradient(45deg, #00c9ff, #92fe9d);
+            color: black;
+            font-weight: bold;
+            border: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #00ffd0;
+        }
+
+        .icon {
+            font-size: 1.8rem;
+            color: #00ffd0;
+            margin-bottom: 10px;
+        }
+
+        .spinner-border {
+            display: none;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1"><i class="fas fa-brain"></i> SmartCommerceAI Dashboard</span>
+    </div>
+</nav>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Recommender System -->
+        <div class="col-md-6 col-lg-4" id="recommender-card">
+            <div class="card text-center p-4">
+                <div class="icon"><i class="fas fa-thumbs-up"></i></div>
+                <h5 class="card-title">Recommender System</h5>
+                <p class="card-text">Generate personalized product recommendations.</p>
+                <button class="btn btn-glow w-100" onclick="runTask('/run_recommender')">Run</button>
+            </div>
+        </div>
+
+        <!-- Demand Forecasting -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card text-center p-4">
+                <div class="icon"><i class="fas fa-chart-line"></i></div>
+                <h5 class="card-title">Demand Forecasting</h5>
+                <p class="card-text">Predict upcoming demand trends using LSTM.</p>
+                <button class="btn btn-glow w-100" onclick="runTask('/run_forecasting')">Run</button>
+            </div>
+        </div>
+
+        <!-- Image Classifier -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card text-center p-4">
+                <div class="icon"><i class="fas fa-image"></i></div>
+                <h5 class="card-title">Image Classifier</h5>
+                <p class="card-text">Classify product images with CNN models.</p>
+                <button class="btn btn-glow w-100" onclick="runTask('/run_image_classifier')">Run</button>
+            </div>
+        </div>
+
+        <!-- Transaction Producer -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card text-center p-4">
+                <div class="icon"><i class="fas fa-sync-alt"></i></div>
+                <h5 class="card-title">Transaction Producer</h5>
+                <p class="card-text">Stream transactions for testing fraud detection.</p>
+                <button class="btn btn-glow w-100" onclick="runTask('/run_transaction_producer')">Start</button>
+            </div>
+        </div>
+
+        <!-- Fraud Detection -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card text-center p-4">
+                <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                <h5 class="card-title">Fraud Detection</h5>
+                <p class="card-text">Catch frauds in real-time using Kafka and ML.</p>
+                <button class="btn btn-glow w-100" onclick="runTask('/run_fraud_detection')">Start</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function runTask(endpoint) {
+        Swal.fire({
+            title: 'Running...',
+            text: 'Please wait while the task completes.',
+            didOpen: () => {
+                Swal.showLoading()
+            },
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        });
+
+        fetch(endpoint)
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Task Completed',
+                        text: `Successfully executed ${endpoint}`,
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    throw new Error();
+                }
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to run the task. Please check the backend.',
+                });
+            });
+    }
+</script>
+
+</body>
+</html>
